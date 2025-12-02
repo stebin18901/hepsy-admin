@@ -1,33 +1,83 @@
-import { Tabs } from 'expo-router';
-import React from 'react';
+import React from "react";
+import { Tabs, usePathname } from "expo-router";
+import {
+  Home,
+  BarChart3,
+  Users,
+  ShoppingBag,
+  User,
+  School,
+} from "lucide-react-native";
 
-import { HapticTab } from '@/components/haptic-tab';
-import { IconSymbol } from '@/components/ui/icon-symbol';
-import { Colors } from '@/constants/theme';
-import { useColorScheme } from '@/hooks/use-color-scheme';
+export default function TabsLayout() {
+  const pathname = usePathname();
 
-export default function TabLayout() {
-  const colorScheme = useColorScheme();
+  // ✅ Hide the tab bar on nested routes (anything beyond main pages)
+  const isMainRoute = [
+    "/home",
+    "/student",
+    "/social",
+    "/market",
+    "/profile",
+  ].includes(pathname);
 
   return (
     <Tabs
       screenOptions={{
-        tabBarActiveTintColor: Colors[colorScheme ?? 'light'].tint,
+        tabBarActiveTintColor: "#1e88e5",
+        tabBarInactiveTintColor: "#555",
         headerShown: false,
-        tabBarButton: HapticTab,
-      }}>
+        // 👇 Hide navbar if not on main route
+        tabBarStyle: isMainRoute ? {} : { display: "none" },
+      }}
+    >
       <Tabs.Screen
-        name="index"
+        name="home"
         options={{
-          title: 'Home',
-          tabBarIcon: ({ color }) => <IconSymbol size={28} name="house.fill" color={color} />,
+          title: "Home",
+          tabBarIcon: ({ color, size }) => (
+            <Home color={color} size={size} />
+          ),
         }}
       />
+
       <Tabs.Screen
-        name="explore"
+        name="student"
         options={{
-          title: 'Explore',
-          tabBarIcon: ({ color }) => <IconSymbol size={28} name="paperplane.fill" color={color} />,
+          title: "Student",
+          tabBarIcon: ({ color, size }) => (
+            <School color={color} size={size} />
+          ),
+        }}
+      />
+
+      <Tabs.Screen
+        name="social"
+        options={{
+          title: "Social",
+          tabBarIcon: ({ color, size }) => (
+            <Users color={color} size={size} />
+          ),
+        }}
+      />
+
+      <Tabs.Screen
+        name="market"
+        options={{
+          title: "Market",
+          tabBarIcon: ({ color, size }) => (
+            <ShoppingBag color={color} size={size} />
+          ),
+        }}
+      />
+
+      <Tabs.Screen
+        name="profile"
+        options={{
+          title: "Profile",
+          tabBarIcon: ({ color, size }) => (
+            <User color={color} size={size} />
+          ),
         }}
       />
     </Tabs>

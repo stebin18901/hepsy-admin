@@ -1,24 +1,39 @@
-import { DarkTheme, DefaultTheme, ThemeProvider } from '@react-navigation/native';
-import { Stack } from 'expo-router';
-import { StatusBar } from 'expo-status-bar';
-import 'react-native-reanimated';
+import { useEffect } from "react";
+import { Slot, useRouter } from "expo-router";
+import { ActivityIndicator, View } from "react-native";
+import { AuthProvider, useAuth } from "../contexts/AuthContext";
+import { ActiveStudentProvider } from "@/contexts/ActiveStudentContext";
 
-import { useColorScheme } from '@/hooks/use-color-scheme';
+function RootNavigator() {
+  const { user, loading } = useAuth();
+  const router = useRouter();
 
-export const unstable_settings = {
-  anchor: '(tabs)',
-};
+  useEffect(() => {
+    if (loading) return;
+    // 🧠 Only handle unauthenticated case here
+    if (!user) router.replace("/(auth)/login");
+    // ✅ If user exists, do nothing — let app/index.tsx handle flow
+  }, [user, loading]);
+
+  if (loading) {
+    return (
+      <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
+        <ActivityIndicator size="large" color="#007AFF" />
+      </View>
+    );
+  }
+
+  // ✅ Once logged in, show app screens normally
+  return <Slot />;
+}
 
 export default function RootLayout() {
-  const colorScheme = useColorScheme();
-
   return (
-    <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
-      <Stack>
-        <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
-        <Stack.Screen name="modal" options={{ presentation: 'modal', title: 'Modal' }} />
-      </Stack>
-      <StatusBar style="auto" />
-    </ThemeProvider>
+    <AuthProvider>
+      <ActiveStudentProvider>
+        <RootNavigator />
+      </ActiveStudentProvider>
+      
+    </AuthProvider>
   );
 }

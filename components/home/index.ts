@@ -1,0 +1,12 @@
+export { default as HeaderCard } from './HeaderCard';
+export { default as StudentSwitcher } from './StudentSwitcher';
+export { default as StatsRow } from './StatsRow';
+export { default as SectionHeading } from './SectionHeading';
+export { default as PerformanceChart } from './PerformanceChart';
+export { default as QuickActions } from './QuickActions';
+export { default as GrowthTrend } from './GrowthTrend';
+export { default as WeakAreas } from './WeakAreas';
+export { default as AchievementsCarousel } from './AchievementsCarousel';
+export { default as UpcomingAssessments } from './UpcomingAssessments';
+export { default as Announcements } from './Announcements';
+export { default as HomeScreen } from './HomeScreen';
